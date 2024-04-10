@@ -18,5 +18,9 @@ public interface AgendaService {
 
     List<AgendaEntity> buscarPorAlunoId(Long alunoId);
 
+    List<AgendaEntity> buscarPorAlunoIdProximos(Long alunoId);
+
     List<AgendaEntity> buscarPorTutorId(Long tutorId);
+
+    List<AgendaEntity> buscarPorTutorIdProximos(Long tutorId);
 }

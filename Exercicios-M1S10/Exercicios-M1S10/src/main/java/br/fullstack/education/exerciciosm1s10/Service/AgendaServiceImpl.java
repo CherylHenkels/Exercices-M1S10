@@ -7,6 +7,8 @@ import br.fullstack.education.exerciciosm1s10.Exception.NotFoundException;
 import br.fullstack.education.exerciciosm1s10.Repository.AgendaRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -77,8 +79,22 @@ public class AgendaServiceImpl implements AgendaService {
     }
 
     @Override
+    public List<AgendaEntity> buscarPorAlunoIdProximos(Long alunoId) {
+        alunoService.buscarPorId(alunoId);
+        return agendaRepository.findByAlunoIdAndDataGreaterThanOrderByData(alunoId, LocalDate.now());
+    }
+
+
+    @Override
     public List<AgendaEntity> buscarPorTutorId(Long tutorId) {
         tutorService.buscarPorId(tutorId);
         return agendaRepository.findByTutorIdOrderByData(tutorId);
+    }
+
+    @Override
+    public List<AgendaEntity> buscarPorTutorIdProximos(Long tutorId) {
+        tutorService.buscarPorId(tutorId);
+        return agendaRepository.findByTutorIdAndDataGreaterThanOrderByData(tutorId, LocalDate.now());
+
     }
 }
