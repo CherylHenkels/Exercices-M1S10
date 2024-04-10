@@ -15,4 +15,8 @@ public interface AgendaService {
     AgendaEntity atualizar(Long id, AgendaEntity agendaEntity);
 
     void excluir(Long id);
+
+    List<AgendaEntity> buscarPorAlunoId(Long alunoId);
+
+    List<AgendaEntity> buscarPorTutorId(Long tutorId);
 }

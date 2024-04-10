@@ -1,6 +1,8 @@
 package br.fullstack.education.exerciciosm1s10.Service;
 
 import br.fullstack.education.exerciciosm1s10.Entity.AgendaEntity;
+import br.fullstack.education.exerciciosm1s10.Entity.AlunoEntity;
+import br.fullstack.education.exerciciosm1s10.Entity.TutorEntity;
 import br.fullstack.education.exerciciosm1s10.Exception.NotFoundException;
 import br.fullstack.education.exerciciosm1s10.Repository.AgendaRepository;
 import org.springframework.stereotype.Service;
@@ -9,11 +11,19 @@ import java.util.List;
 
 @Service
 public class AgendaServiceImpl implements AgendaService {
-    private AgendaRepository agendaRepository;
 
-    public AgendaServiceImpl(AgendaRepository agendaRepository) {
+    private AgendaRepository agendaRepository;
+    private AlunoService alunoService;
+    private TutorService tutorService;
+
+
+    public AgendaServiceImpl(TutorService tutorService, AlunoService alunoService, AgendaRepository agendaRepository) {
+        this.tutorService = tutorService;
+        this.alunoService = alunoService;
         this.agendaRepository = agendaRepository;
     }
+
+
 
     @Override
     public List<AgendaEntity> buscarTodos() {
@@ -31,6 +41,13 @@ public class AgendaServiceImpl implements AgendaService {
     @Override
     public AgendaEntity criar(AgendaEntity agendaEntity) {
         agendaEntity.setId(null);
+
+        AlunoEntity alunoEntity = alunoService.buscarPorId(agendaEntity.getAluno().getId());
+        agendaEntity.setAluno(alunoEntity);
+
+        TutorEntity tutorEntity = tutorService.buscarPorId(agendaEntity.getTutor().getId());
+        agendaEntity.setTutor(tutorEntity);
+
         return agendaRepository.save(agendaEntity);
     }
 
@@ -38,11 +55,30 @@ public class AgendaServiceImpl implements AgendaService {
     public AgendaEntity atualizar(Long id, AgendaEntity agendaEntity) {
         buscarPorId(id);
         agendaEntity.setId(id);
+
+        AlunoEntity alunoEntity = alunoService.buscarPorId(agendaEntity.getAluno().getId());
+        agendaEntity.setAluno(alunoEntity);
+
+        TutorEntity tutorEntity = tutorService.buscarPorId(agendaEntity.getTutor().getId());
+        agendaEntity.setTutor(tutorEntity);
+
         return agendaRepository.save(agendaEntity);
     }
 
     @Override
     public void excluir(Long id) {
         agendaRepository.delete(buscarPorId(id));
+    }
+
+    @Override
+    public List<AgendaEntity> buscarPorAlunoId(Long alunoId) {
+        alunoService.buscarPorId(alunoId);
+        return agendaRepository.findByAlunoIdOrderByData(alunoId);
+    }
+
+    @Override
+    public List<AgendaEntity> buscarPorTutorId(Long tutorId) {
+        tutorService.buscarPorId(tutorId);
+        return agendaRepository.findByTutorIdOrderByData(tutorId);
     }
 }

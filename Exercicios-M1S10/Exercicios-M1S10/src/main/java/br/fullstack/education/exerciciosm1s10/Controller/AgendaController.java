@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("agendas")
+@RequestMapping("agendamentos")
 public class AgendaController {
 
     private final AgendaService agendaService;
@@ -26,6 +26,16 @@ public class AgendaController {
     @GetMapping("{id}")
     public ResponseEntity<AgendaEntity> getId(@PathVariable Long id){
         return ResponseEntity.ok(agendaService.buscarPorId(id));
+    }
+
+    @GetMapping("aluno-id/{alunoId}")
+    public ResponseEntity<List<AgendaEntity>> getAlunoId(@PathVariable Long alunoId){
+        return ResponseEntity.ok(agendaService.buscarPorAlunoId(alunoId));
+    }
+
+    @GetMapping("tutor-id/{tutorId}")
+    public ResponseEntity<List<AgendaEntity>> getTutorId(@PathVariable Long tutorId){
+        return ResponseEntity.ok(agendaService.buscarPorTutorId(tutorId));
     }
 
     @PostMapping
