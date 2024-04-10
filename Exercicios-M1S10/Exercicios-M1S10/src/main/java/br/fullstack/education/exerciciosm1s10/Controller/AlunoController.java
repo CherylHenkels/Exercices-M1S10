@@ -23,7 +23,7 @@ public class AlunoController {
         return ResponseEntity.ok(alunoService.buscarTodos());
     }
 
-    @GetMapping("id")
+    @GetMapping("{id}")
     public ResponseEntity<AlunoEntity> getId(@PathVariable Long id){
         return ResponseEntity.ok(alunoService.buscarPorId(id));
     }
